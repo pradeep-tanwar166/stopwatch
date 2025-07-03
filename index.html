@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stylish Stopwatch</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: radial-gradient(circle at top left, #0f0f0f, #1c1c1c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #00ffcc;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      font-size: 3rem;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    #timer {
+      font-size: 4rem;
+      letter-spacing: 2px;
+      padding: 20px 40px;
+      border: 2px solid #00ffcc;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 20px #00ffcc;
+      margin-bottom: 30px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      background: #00ffcc;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Stopwatch</h1>
+  <div id="timer">00:00:00</div>
+  <div class="buttons">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <script>
+    let start = document.querySelector("#start");
+    let stop = document.querySelector("#stop");
+    let reset = document.querySelector("#reset");
+
+    let a = 0; // millisecond
+    let i = 0; // second
+    let j = 0; // minute
+    let intervalId;
+    let isRunning = false;
+
+    function startwatch() {
+      if (!isRunning) {
+        isRunning = true;
+        intervalId = setInterval(function () {
+          document.querySelector("#timer").innerText =
+            `${String(j).padStart(2, '0')}:${String(i).padStart(2, '0')}:${String(a).padStart(2, '0')}`;
+          
+          a++;
+          if (a == 100) {
+            i++;
+            a = 0;
+          }
+          if (i == 60) {
+            j++;
+            i = 0;
+          }
+        }, 10);
+      }
+    }
+
+    start.addEventListener("click", startwatch);
+
+    stop.addEventListener("click", () => {
+      clearInterval(intervalId);
+      isRunning = false;
+    });
+
+    reset.addEventListener("click", () => {
+      clearInterval(intervalId);
+      a = 0;
+      i = 0;
+      j = 0;
+      isRunning = false;
+      document.querySelector("#timer").innerText = "00:00:00";
+    });
+  </script>
+</body>
+</html>
